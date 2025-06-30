@@ -12,10 +12,10 @@ import java.math.BigDecimal;
 public class BankIntraBankTransferReq {
 
     @NotBlank
-    private String destinationName;
+    private String destinationAccountName;
 
     @NotBlank
-    private String destinationNumber;
+    private String destinationAccountNumber;
 
     @NotBlank
     private String sourceAccountNumber;

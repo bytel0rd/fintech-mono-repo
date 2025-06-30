@@ -1,10 +1,17 @@
+server:
+  port: 8080
+
+logging:
+  level:
+    org.springframework.cloud.gateway: TRACE
+    reactor.netty.http.client: TRACE
+
 spring:
   application:
     name: api-gateway
   cloud:
     config:
       enabled: false
-      import:optional:configserver:
     gateway:
       discovery:
         locator:
@@ -14,3 +21,22 @@ spring:
           uri: lb://middleware-service
           predicates:
             - Path=/platform/**
+          filters:
+            - name: RewritePath
+              args:
+                regexp: '/platform/(?<segment>.*)'
+                replacement: '/${segment}'
+
+# Config import should be top-level if needed (remove if config is disabled)
+#spring.config.import: optional:configserver:
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URI:http://localhost:9090/eureka}
+    register-with-eureka: true
+    fetch-registry: true
+    instance:
+      hostname: localhost
+      prefer-ip-address: true
+

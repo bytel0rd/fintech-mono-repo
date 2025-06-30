@@ -12,6 +12,7 @@ public class ApiResponse<T> {
     public static final String GENERAL_ERROR_MESSAGE = "Operation failed";
 
     private T data;
+    private Object errors;
     private String message;
     private int statusCode;
 

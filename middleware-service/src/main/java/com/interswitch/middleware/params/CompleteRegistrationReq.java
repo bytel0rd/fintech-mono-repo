@@ -9,4 +9,5 @@ import lombok.Setter;
 public class CompleteRegistrationReq {
     private String accountNumber;
     private String accountName;
+    private String demoPhoneNumber;
 }

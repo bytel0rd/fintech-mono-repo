@@ -7,8 +7,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class BankIntraBankLookupRequest {
-    @NotBlank
-    private String accountName;
 
     @NotBlank
     private String accountNumber;

@@ -74,7 +74,7 @@ public class MiddlewareService {
             }
 
             BvnData bvnData = bvnLookupResponse.getData();
-            if (bvnData.getDob().equalsIgnoreCase(req.getDob())) {
+            if (!bvnData.getDob().equalsIgnoreCase(req.getDob())) {
                 response.setMessage("Invalid bvn details");
                 return response;
             }
@@ -83,7 +83,7 @@ public class MiddlewareService {
                     .req(req)
                     .creationMode(RegistrationStates.AccountCreationMode.CreateAccount)
                     .bvnData(bvnData)
-                    .accountDetails(Optional.empty())
+                    .accountDetails(null)
                     .otpCode(MOCKED_OTP_CODE) // OTP can be hashed.
                     .isOTPVerified(false)
                     .build();
@@ -92,7 +92,7 @@ public class MiddlewareService {
             if (accountDetailsApiResponse.isSuccessful()) {
                 if (!accountDetailsApiResponse.getData().getAccounts().isEmpty()) {
                     initiatedState.setCreationMode(RegistrationStates.AccountCreationMode.PullExistingAccount);
-                    initiatedState.setAccountDetails(Optional.of(accountDetailsApiResponse.getData()));
+                    initiatedState.setAccountDetails(accountDetailsApiResponse.getData());
                 }
             }
 
@@ -101,8 +101,8 @@ public class MiddlewareService {
             sendSMS(phoneNumber, String.format("Your OTP code is: %s", MOCKED_OTP_CODE));
             RegisterInitiateSessionResponse session = RegisterInitiateSessionResponse.builder().sessionId(initiatedState.getSessionId()).build();
             String maskedPhoneNumber = "***" + phoneNumber.substring(phoneNumber.length() - 3, phoneNumber.length() - 1);
-            response = new ApiResponse<>(ApiResponse.ERROR_CODE, String.format("OTP sent to %s phoneNumber", maskedPhoneNumber));
-
+            response = new ApiResponse<>(ApiResponse.SUCCESS_CODE, String.format("OTP sent to %s phoneNumber", maskedPhoneNumber));
+            response.setData(session);
         } catch (Exception e) {
             log.error("Initiate registration failed", e);
         }
@@ -128,6 +128,7 @@ public class MiddlewareService {
             }
             initiatedState.setOTPVerified(true);
             redis.setValue(initiatedState.getSessionId(), mapper.writeValueAsString(initiatedState));
+            response = new ApiResponse<>(ApiResponse.SUCCESS_CODE, "Continue to setup password");
         } catch (Exception e) {
             log.error("Verify registration OTP failed", e);
         }
@@ -155,13 +156,15 @@ public class MiddlewareService {
             }
 
             String primaryAccountNumber = null;
+            String accountName = null;
             String platformId = null;
 
             switch (initiatedState.getCreationMode()) {
                 case PullExistingAccount -> {
-                    AccountDetails accountDetails = initiatedState.getAccountDetails().get();
+                    AccountDetails accountDetails = initiatedState.getAccountDetails();
                     platformId = accountDetails.getPlatformId();
-                    primaryAccountNumber = accountDetails.getAccounts().getFirst().getAccountNumber();
+                    primaryAccountNumber = accountDetails.getAccounts().get(0).getAccountNumber();
+                    accountName = accountDetails.getAccounts().get(0).getAccountName();
                 }
                 case CreateAccount -> {
                     CreateAccountReq createAccountReq = CreateAccountReq.builder()
@@ -180,6 +183,7 @@ public class MiddlewareService {
                     }
                     primaryAccountNumber = createAccountResponse.getData().getAccountNumber();
                     platformId = createAccountResponse.getData().getPlatformId();
+                    accountName = createAccountResponse.getData().getAccountName();
                 }
             }
 
@@ -196,7 +200,13 @@ public class MiddlewareService {
                     .build();
 
             userRepo.save(user);
+
+            CompleteRegistrationReq completeRegistrationReq = new CompleteRegistrationReq();
+            completeRegistrationReq.setAccountName(accountName);
+            completeRegistrationReq.setDemoPhoneNumber(user.getPhoneNumber());
+            completeRegistrationReq.setAccountNumber(primaryAccountNumber);
             response = new ApiResponse<>(ApiResponse.SUCCESS_CODE, "Account created, proceed to login");
+            response.setData(completeRegistrationReq);
         } catch (Exception e) {
             log.error("Complete registration setup failed", e);
         }
@@ -274,6 +284,10 @@ public class MiddlewareService {
                 return response;
             }
             User user = savedUser.get();
+            if (StringUtils.isNotBlank(user.getPinHash())) {
+                response.setMessage("PIN setup already completed");
+                return response;
+            }
             user.setPinHash(passwordEncoder.encode(setupPinReq.getPin()));
             userRepo.save(user);
             return new ApiResponse<>(ApiResponse.SUCCESS_CODE, ApiResponse.GENERAL_SUCCESS_MESSAGE);
@@ -341,15 +355,15 @@ public class MiddlewareService {
                 .userId(transferReq.getUserId())
                 .transactionRef(transferReq.getTransactionRef())
                 .sourceAccountNumber(transferReq.getSourceAccountNumber())
-                .destinationAccountNumber(transferReq.getDestinationNumber())
-                .destinationAccountName(transferReq.getDestinationName())
+                .destinationAccountNumber(transferReq.getDestinationAccountNumber())
+                .destinationAccountName(transferReq.getDestinationAccountName())
                 .destinationBankCode(null)
                 .amount(transferReq.getAmount())
                 .charge(java.math.BigDecimal.ZERO)
                 .status(TransactionStatus.INITIATED)
                 .transactionType(TransactionType.INTRA_BANK_TRANSFER)
                 .message("Intra-bank transfer initiated")
-                .narration(StringUtils.isNotBlank(transferReq.getNarration()) ? transferReq.getNarration() : "INTRA/" + transferReq.getDestinationNumber())
+                .narration(StringUtils.isNotBlank(transferReq.getNarration()) ? transferReq.getNarration() : "INTRA/" + transferReq.getDestinationAccountNumber())
                 .createdAt(new java.util.Date())
                 .channel(transferReq.getChannel())
                 .build();
@@ -398,15 +412,15 @@ public class MiddlewareService {
                     .userId(transferReq.getUserId())
                     .transactionRef(transferReq.getTransactionRef())
                     .sourceAccountNumber(transferReq.getSourceAccountNumber())
-                    .destinationAccountNumber(transferReq.getDestinationNumber())
-                    .destinationAccountName(transferReq.getDestinationName())
+                    .destinationAccountNumber(transferReq.getDestinationAccountNumber())
+                    .destinationAccountName(transferReq.getDestinationAccountName())
                     .destinationBankCode(transferReq.getDestinationBankCode())
                     .amount(transferReq.getAmount())
                     .charge(java.math.BigDecimal.ZERO)
                     .status(TransactionStatus.INITIATED)
                     .transactionType(TransactionType.INTER_BANK_TRANSFER)
                     .message("Inter-bank transfer initiated")
-                    .narration(StringUtils.isNotBlank(transferReq.getNarration()) ? transferReq.getNarration() : "OTB/" + transferReq.getDestinationNumber())
+                    .narration(StringUtils.isNotBlank(transferReq.getNarration()) ? transferReq.getNarration() : "OTB/" + transferReq.getDestinationAccountNumber())
                     .createdAt(new java.util.Date())
                     .channel(transferReq.getChannel())
                     .build();
@@ -430,16 +444,19 @@ public class MiddlewareService {
     public ApiResponse<List<TransactionDto>> getTransactionHistory(Long userId) {
         ApiResponse<List<TransactionDto>> response = new ApiResponse<>(ApiResponse.ERROR_CODE, ApiResponse.GENERAL_ERROR_MESSAGE);
         try {
-            List<Transaction> txns = transactionRepo.findByUserIdDesc(userId);
+            List<Transaction> txns = transactionRepo.findByUserId(userId);
             List<TransactionDto> dtos = txns.stream().map(txn -> {
                 TransactionDto dto = new TransactionDto();
+                dto.setSourceAccountNumber(txn.getSourceAccountNumber());
                 dto.setTransactionRef(txn.getTransactionRef());
+                dto.setCharge(txn.getCharge());
                 dto.setAmount(txn.getAmount());
                 dto.setStatus(txn.getStatus());
                 dto.setTransactionType(txn.getTransactionType());
                 dto.setCreatedAt(txn.getCreatedAt());
                 dto.setChannel(txn.getChannel());
                 dto.setNarration(txn.getNarration());
+                dto.setDestinationBankCode(txn.getDestinationBankCode());
                 if (txn.getTransactionType() == TransactionType.BILL_PAYMENT) {
                     dto.setBeneficiary(txn.getBeneficiary());
                 } else {

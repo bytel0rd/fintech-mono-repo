@@ -1,6 +1,7 @@
 package com.interswitch.middleware.client;
 
 import com.interswitch.middleware.integrations.banking.params.BankInterBankLookupRequest;
+import com.interswitch.middleware.integrations.banking.params.BankIntraBankLookupRequest;
 import com.interswitch.middleware.integrations.bills.params.ValidateBill;
 import com.interswitch.middleware.params.*;
 import com.interswitch.middleware.service.MiddlewareService;
@@ -8,42 +9,45 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
 @Slf4j
-@Controller
+@RestController
 @RequestMapping("/v1")
 @RequiredArgsConstructor
 public class Operations {
 
     private final MiddlewareService middlewareSvc;
 
+    @GetMapping("/status")
+    public ApiResponse<?> health() {
+        return new ApiResponse<>(ApiResponse.SUCCESS_CODE, "Alive");
+    }
+
     @PostMapping("/auth/registration/initiate")
-    public ApiResponse<?> initiateRegistration(@Valid RegisterInitiateReq req) {
+    public ApiResponse<?> initiateRegistration(@RequestBody @Valid RegisterInitiateReq req) {
         return middlewareSvc.initiateRegistration(req);
     }
 
     @PostMapping("/auth/registration/verify")
-    public ApiResponse<?> verifyOtp(@Valid VerifyOtpReq otpReq) {
+    public ApiResponse<?> verifyOtp(@RequestBody @Valid VerifyOtpReq otpReq) {
         return middlewareSvc.verifyOtp(otpReq);
     }
 
     @PostMapping("/auth/registration/complete")
-    public ApiResponse<?> setupPassword(@Valid SetupPasswordReq setupPasswordReq) {
+    public ApiResponse<?> setupPassword(@RequestBody @Valid SetupPasswordReq setupPasswordReq) {
         return middlewareSvc.setupPassword(setupPasswordReq);
     }
 
     @PostMapping("/auth/login")
-    public ApiResponse<?> login(@Valid LoginReq loginReq) {
+    public ApiResponse<?> login(@RequestBody @Valid LoginReq loginReq) {
         return middlewareSvc.login(loginReq);
     }
 
     @PostMapping("/onboarding/setup-pin")
-    public ApiResponse<?> setupPin(@Valid SetupPinReq setupPinReq, @RequestHeader("sessionId") String sessionId) {
+    public ApiResponse<?> setupPin(@RequestBody @Valid SetupPinReq setupPinReq, @RequestHeader("sessionId") String sessionId) {
         ApiResponse<SessionData> sessionResp = getSession(sessionId);
         if (!sessionResp.isSuccessful()) {
             return sessionResp;
@@ -53,7 +57,7 @@ public class Operations {
         return middlewareSvc.setupPin(setupPinReq);
     }
 
-    @PostMapping("/account/details")
+    @GetMapping("/account/details")
     public ApiResponse<?> getAccountDetails(@RequestHeader("sessionId") String sessionId) {
         ApiResponse<SessionData> sessionResp = getSession(sessionId);
         if (!sessionResp.isSuccessful()) {
@@ -64,7 +68,7 @@ public class Operations {
     }
 
     @PostMapping("/transfers/intrabank/lookup")
-    public ApiResponse<?> intraBankLookup(@RequestHeader("sessionId") String sessionId, @Valid BankInterBankLookupRequest req) {
+    public ApiResponse<?> intraBankLookup(@RequestHeader("sessionId") String sessionId, @RequestBody @Valid BankIntraBankLookupRequest req) {
         ApiResponse<SessionData> sessionResp = getSession(sessionId);
         if (!sessionResp.isSuccessful()) {
             return sessionResp;
@@ -73,7 +77,7 @@ public class Operations {
     }
 
     @PostMapping("/transfers/intrabank/transfer")
-    public ApiResponse<?> intraBankTransfer(@RequestHeader("sessionId") String sessionId, @Valid IntraBankTransferReq req) {
+    public ApiResponse<?> intraBankTransfer(@RequestHeader("sessionId") String sessionId, @RequestBody @Valid IntraBankTransferReq req) {
         ApiResponse<SessionData> sessionResp = getSession(sessionId);
         if (!sessionResp.isSuccessful()) {
             return sessionResp;
@@ -84,7 +88,7 @@ public class Operations {
     }
 
     @PostMapping("/transfers/interbank/lookup")
-    public ApiResponse<?> interBankLookup(@RequestHeader("sessionId") String sessionId, @Valid BankInterBankLookupRequest req) {
+    public ApiResponse<?> interBankLookup(@RequestHeader("sessionId") String sessionId, @RequestBody @Valid BankInterBankLookupRequest req) {
         ApiResponse<SessionData> sessionResp = getSession(sessionId);
         if (!sessionResp.isSuccessful()) {
             return sessionResp;
@@ -93,7 +97,7 @@ public class Operations {
     }
 
     @PostMapping("/transfers/interbank/transfer")
-    public ApiResponse<?> interBankTransfer(@RequestHeader("sessionId") String sessionId, @Valid InterBankTransferReq req) {
+    public ApiResponse<?> interBankTransfer(@RequestHeader("sessionId") String sessionId, @RequestBody @Valid InterBankTransferReq req) {
         ApiResponse<SessionData> sessionResp = getSession(sessionId);
         if (!sessionResp.isSuccessful()) {
             return sessionResp;
@@ -103,12 +107,12 @@ public class Operations {
         return middlewareSvc.interBankTransfer(req);
     }
 
-    @PostMapping("/banks")
+    @GetMapping("/banks")
     public ApiResponse<?> getBanks() {
         return middlewareSvc.getBanks();
     }
 
-    @PostMapping("/transactions")
+    @GetMapping("/transactions")
     public ApiResponse<?> getTransactionHistory(@RequestHeader("sessionId") String sessionId) {
         ApiResponse<SessionData> sessionResp = getSession(sessionId);
         if (!sessionResp.isSuccessful()) {
@@ -118,19 +122,19 @@ public class Operations {
         return middlewareSvc.getTransactionHistory(session.getUserId());
     }
 
-    @PostMapping("/bills/list")
+    @GetMapping("/bills/list")
     public ApiResponse<?> getBills() {
         return middlewareSvc.getBills();
     }
 
     @PostMapping("/bills/validate")
-    public ApiResponse<?> validateBill(@RequestHeader("sessionId") String sessionId, @Valid ValidateBill req) {
+    public ApiResponse<?> validateBill(@RequestHeader("sessionId") String sessionId, @RequestBody @Valid ValidateBill req) {
         return middlewareSvc.validateBill(req);
     }
 
-    @PostMapping("/bills/payBill")
+    @PostMapping("/bills/pay")
     public ApiResponse<?> payBills(@RequestHeader("sessionId") String sessionId,
-                                   @Valid PayBillReq req) {
+                                   @RequestBody @Valid PayBillReq req) {
         ApiResponse<SessionData> sessionResp = getSession(sessionId);
         if (!sessionResp.isSuccessful()) return sessionResp;
         SessionData session = sessionResp.getData();

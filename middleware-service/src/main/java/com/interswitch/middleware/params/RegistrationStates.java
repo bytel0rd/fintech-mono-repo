@@ -2,9 +2,7 @@ package com.interswitch.middleware.params;
 
 import com.interswitch.middleware.integrations.banking.params.AccountDetails;
 import com.interswitch.middleware.integrations.banking.params.BvnData;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Optional;
 
@@ -18,6 +16,8 @@ public class RegistrationStates {
     @Getter
     @Setter
     @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class InitiatedState {
         private String sessionId;
         private AccountCreationMode creationMode;
@@ -26,8 +26,7 @@ public class RegistrationStates {
         private String otpCode;
         private boolean isOTPVerified;
 
-        @Builder.Default
-        private Optional<AccountDetails> accountDetails = Optional.empty();
+        private AccountDetails accountDetails;
 
 
     }

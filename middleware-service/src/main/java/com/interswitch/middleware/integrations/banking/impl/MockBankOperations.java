@@ -5,11 +5,8 @@ import com.interswitch.middleware.integrations.banking.params.*;
 import com.interswitch.middleware.params.ApiResponse;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.security.SecureRandom;
+import java.util.*;
 
 @Service
 public class MockBankOperations implements BankOperations {
@@ -31,7 +28,7 @@ public class MockBankOperations implements BankOperations {
                 .lastName("Doe")
                 .middleName("Middle")
                 .gender("M")
-                .phoneNumber("08012345678")
+                .phoneNumber("234801234" + new SecureRandom().nextLong(1000, 9999))
                 .build();
 
         return ApiResponse.Success(bvnData);
@@ -40,9 +37,10 @@ public class MockBankOperations implements BankOperations {
     @Override
     public ApiResponse<CreateAccountResponse> createAccount(CreateAccountReq createAccountReq) {
         CreateAccountResponse response = new CreateAccountResponse();
+        long randomBit = new SecureRandom().nextLong(1000, 9999);
         response.setAccountName(createAccountReq.getFirstName() + " " + createAccountReq.getLastName());
-        response.setAccountNumber(MOCK_ACCOUNT_NUMBER);
-        response.setPlatformId(MOCK_PLATFORM_ID);
+        response.setAccountNumber("013456" + randomBit);
+        response.setPlatformId(String.valueOf(randomBit));
         return ApiResponse.Success(response);
     }
 
@@ -57,8 +55,8 @@ public class MockBankOperations implements BankOperations {
 
         AccountDetails accountDetails = AccountDetails.builder()
                 .accountName("John Doe")
-                .platformId(MOCK_PLATFORM_ID)
-                .accounts(Arrays.asList(detail))
+                .platformId("MOCKED_" + MOCK_PLATFORM_ID)
+                .accounts(Collections.singletonList(detail))
                 .build();
 
         return ApiResponse.Success(accountDetails);
@@ -70,7 +68,8 @@ public class MockBankOperations implements BankOperations {
             return new ApiResponse<>(ApiResponse.ERROR_CODE, "Invalid BVN provided");
         }
 
-        return getAccountDetails(MOCK_ACCOUNT_NUMBER);
+        long randomBit = new SecureRandom().nextLong(1000, 9999);
+        return getAccountDetails("013456" + randomBit);
     }
 
     @Override
@@ -84,8 +83,8 @@ public class MockBankOperations implements BankOperations {
     @Override
     public ApiResponse<IntraBankTransferResponse> intraBankTransfer(BankIntraBankTransferReq transferReq) {
         IntraBankTransferResponse response = new IntraBankTransferResponse();
-        response.setAccountName(transferReq.getDestinationName());
-        response.setAccountNumber(transferReq.getDestinationNumber());
+        response.setAccountName(transferReq.getDestinationAccountName());
+        response.setAccountNumber(transferReq.getDestinationAccountNumber());
         response.setTransactionRef(transferReq.getTransactionRef());
         response.setAmount(transferReq.getAmount());
         return ApiResponse.Success(response);
@@ -103,8 +102,8 @@ public class MockBankOperations implements BankOperations {
     @Override
     public ApiResponse<InterBankTransferResponse> interBankTransfer(BankInterBankTransferReq transferReq) {
         InterBankTransferResponse response = new InterBankTransferResponse();
-        response.setAccountName(transferReq.getDestinationName());
-        response.setAccountNumber(transferReq.getDestinationNumber());
+        response.setAccountName(transferReq.getDestinationAccountName());
+        response.setAccountNumber(transferReq.getDestinationAccountNumber());
         response.setTransactionRef(transferReq.getTransactionRef());
         response.setDestinationBankCode(transferReq.getDestinationBankCode());
         response.setAmount(transferReq.getAmount());

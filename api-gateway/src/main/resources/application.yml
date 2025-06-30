@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    config:
+      enabled: false
+      import:optional:configserver:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: middleware-service
+          uri: lb://middleware-service
+          predicates:
+            - Path=/platform/**

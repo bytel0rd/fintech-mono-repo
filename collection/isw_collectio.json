@@ -1,0 +1,1369 @@
+{
+	"info": {
+		"_postman_id": "df3482db-0c2b-4e8d-b648-0bd62621e916",
+		"name": "ISW-TEST",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "9798395"
+	},
+	"item": [
+		{
+			"name": "Get-status",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base-url}}/v1/status",
+					"host": [
+						"{{base-url}}"
+					],
+					"path": [
+						"v1",
+						"status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register-iniitiate",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"bvn\": \"20000000000\",\n    \"dob\": \"1990-10-10\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base-url}}/v1/auth/registration/initiate",
+					"host": [
+						"{{base-url}}"
+					],
+					"path": [
+						"v1",
+						"auth",
+						"registration",
+						"initiate"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Ok",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"bvn\": \"20000000000\",\n    \"dob\": \"1990-10-10\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/v1/auth/registration/initiate",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"v1",
+								"auth",
+								"registration",
+								"initiate"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 30 Jun 2025 20:00:19 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"statusCode\": 0,\n    \"message\": \"OTP sent to ***87 phoneNumber\",\n    \"data\": {\n        \"sessionId\": \"2b485a5b-6008-49f3-ac68-15375ce7da4f\"\n    },\n    \"errors\": null,\n    \"successful\": true\n}"
+				}
+			]
+		},
+		{
+			"name": "Register-verify",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"sessionId\": \"{{register-session-id}}\",\n    \"otpCode\": \"5341\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base-url}}/v1/auth/registration/verify",
+					"host": [
+						"{{base-url}}"
+					],
+					"path": [
+						"v1",
+						"auth",
+						"registration",
+						"verify"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Ok",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"sessionId\": \"\",\n    \"otpCode\": \"5341\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/v1/auth/registration/verify",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"v1",
+								"auth",
+								"registration",
+								"verify"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 30 Jun 2025 20:44:32 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"statusCode\": 0,\n    \"message\": \"Continue to setup password\",\n    \"data\": null,\n    \"errors\": null,\n    \"successful\": true\n}"
+				}
+			]
+		},
+		{
+			"name": "Register-complete-password-setup",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"sessionId\": \"{{register-session-id}}\",\n    \"password\": \"Pa!cw0rd\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base-url}}/v1/auth/registration/complete",
+					"host": [
+						"{{base-url}}"
+					],
+					"path": [
+						"v1",
+						"auth",
+						"registration",
+						"complete"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "oK",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"sessionId\": \"\",\n    \"password\": \"Pa!cw0rd\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/v1/auth/registration/complete",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"v1",
+								"auth",
+								"registration",
+								"complete"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 30 Jun 2025 20:55:46 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"statusCode\": 0,\n    \"message\": \"Account created, proceed to login\",\n    \"data\": {\n        \"accountNumber\": \"0134568358\",\n        \"accountName\": \"John Doe\",\n        \"demoPhoneNumber\": \"2348012342168\"\n    },\n    \"errors\": null,\n    \"successful\": true\n}"
+				}
+			]
+		},
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"phoneNumber\": \"2348012342168\",\n    \"password\": \"Pa!cw0rd\",\n    \"channel\": \"MOBILE\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base-url}}/v1/auth/login",
+					"host": [
+						"{{base-url}}"
+					],
+					"path": [
+						"v1",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Ok",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"phoneNumber\": \"2348012342168\",\n    \"password\": \"Pa!cw0rd\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/v1/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"v1",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 30 Jun 2025 20:57:02 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"statusCode\": 0,\n    \"message\": \"PIN setup required\",\n    \"data\": {\n        \"sessionId\": \"434d32e1-b167-45e5-96ca-d220c689d79e\",\n        \"firstName\": \"John\",\n        \"accounts\": [\n            {\n                \"accountName\": \"John Doe\",\n                \"accountNumber\": \"0134568358\",\n                \"availableBalance\": \"1000000.00\",\n                \"totalBalance\": \"1000000.00\"\n            }\n        ],\n        \"pinSetupRequired\": true,\n        \"recentTransactions\": []\n    },\n    \"errors\": null,\n    \"successful\": true\n}"
+				}
+			]
+		},
+		{
+			"name": "Setup PIN",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"pin\": \"5431\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base-url}}/v1/onboarding/setup-pin",
+					"host": [
+						"{{base-url}}"
+					],
+					"path": [
+						"v1",
+						"onboarding",
+						"setup-pin"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Ok",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"pin\": \"5431\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/v1/onboarding/setup-pin",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"v1",
+								"onboarding",
+								"setup-pin"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 30 Jun 2025 20:59:45 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"statusCode\": 0,\n    \"message\": \"Operation successfully\",\n    \"data\": null,\n    \"errors\": null,\n    \"successful\": true\n}"
+				}
+			]
+		},
+		{
+			"name": "Get-Account-Details",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n \n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base-url}}/v1/account/details",
+					"host": [
+						"{{base-url}}"
+					],
+					"path": [
+						"v1",
+						"account",
+						"details"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Ok",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/v1/account/details",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"v1",
+								"account",
+								"details"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 30 Jun 2025 21:00:48 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"statusCode\": 0,\n    \"message\": \"Operation successfully\",\n    \"data\": {\n        \"firstName\": \"John\",\n        \"lastName\": \"Doe\",\n        \"accounts\": [\n            {\n                \"accountName\": \"John Doe\",\n                \"accountNumber\": \"0134568358\",\n                \"availableBalance\": \"1000000.00\",\n                \"totalBalance\": \"1000000.00\"\n            }\n        ]\n    },\n    \"errors\": null,\n    \"successful\": true\n}"
+				}
+			]
+		},
+		{
+			"name": "Intrabank-lookup",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"accountNumber\": \"0224621771\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base-url}}/v1/transfers/intrabank/lookup",
+					"host": [
+						"{{base-url}}"
+					],
+					"path": [
+						"v1",
+						"transfers",
+						"intrabank",
+						"lookup"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Ok",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"accountNumber\": \"0224621771\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/v1/transfers/intrabank/lookup",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"v1",
+								"transfers",
+								"intrabank",
+								"lookup"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 30 Jun 2025 21:27:07 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"statusCode\": 0,\n    \"message\": \"Operation successfully\",\n    \"data\": {\n        \"accountName\": \"John Doe\",\n        \"accountNumber\": \"0224621771\"\n    },\n    \"errors\": null,\n    \"successful\": true\n}"
+				}
+			]
+		},
+		{
+			"name": "Intrabank-transfer",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"destinationAccountName\": \"John Doe\",\n    \"destinationAccountNumber\": \"0224621771\",\n    \"sourceAccountNumber\": \"0134568358\",\n    \"transactionRef\": \"{{$randomUUID}}\",\n    \"amount\": 2000,\n    \"channel\": \"MOBILE\",\n    \"pin\": \"5431\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base-url}}/v1/transfers/intrabank/transfer",
+					"host": [
+						"{{base-url}}"
+					],
+					"path": [
+						"v1",
+						"transfers",
+						"intrabank",
+						"transfer"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Ok",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"destinationAccountName\": \"John Doe\",\n    \"destinationAccountNumber\": \"0224621771\",\n    \"sourceAccountNumber\": \"0134568358\",\n    \"transactionRef\": \"2024dfaf-1445-4745-92e6-19a36ff54547\",\n    \"amount\": 2000,\n    \"channel\": \"MOBILE\",\n    \"pin\": \"5431\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/v1/transfers/intrabank/transfer",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"v1",
+								"transfers",
+								"intrabank",
+								"transfer"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 30 Jun 2025 21:34:41 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"statusCode\": 0,\n    \"message\": \"Operation successfully\",\n    \"data\": {\n        \"accountName\": \"John Doe\",\n        \"accountNumber\": \"0224621771\",\n        \"transactionRef\": \"9aeed46a-670e-4331-b8da-dfe8e0b77ccd\",\n        \"destinationBankCode\": null,\n        \"amount\": 2000\n    },\n    \"errors\": null,\n    \"successful\": true\n}"
+				}
+			]
+		},
+		{
+			"name": "Get-Banks",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base-url}}/v1/banks",
+					"host": [
+						"{{base-url}}"
+					],
+					"path": [
+						"v1",
+						"banks"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Ok",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/v1/banks",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"v1",
+								"banks"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 30 Jun 2025 21:37:56 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"statusCode\": 0,\n    \"message\": \"Operation successfully\",\n    \"data\": [\n        {\n            \"name\": \"Mock Bank 1\",\n            \"code\": \"001\"\n        },\n        {\n            \"name\": \"Mock Bank 2\",\n            \"code\": \"002\"\n        }\n    ],\n    \"errors\": null,\n    \"successful\": true\n}"
+				}
+			]
+		},
+		{
+			"name": "Interbank-lookup",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"accountNumber\": \"0224621771\",\n    \"destinationBankCode\": \"001\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base-url}}/v1/transfers/interbank/lookup",
+					"host": [
+						"{{base-url}}"
+					],
+					"path": [
+						"v1",
+						"transfers",
+						"interbank",
+						"lookup"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Ok",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"accountNumber\": \"0224621771\",\n    \"destinationBankCode\": \"001\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/v1/transfers/interbank/lookup",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"v1",
+								"transfers",
+								"interbank",
+								"lookup"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 30 Jun 2025 21:39:05 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"statusCode\": 0,\n    \"message\": \"Operation successfully\",\n    \"data\": {\n        \"accountName\": \"John Doe\",\n        \"accountNumber\": \"0224621771\",\n        \"destinationCode\": \"001\"\n    },\n    \"errors\": null,\n    \"successful\": true\n}"
+				}
+			]
+		},
+		{
+			"name": "Interbank-transfer",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"destinationAccountName\": \"John Doe\",\n    \"destinationAccountNumber\": \"0224621771\",\n    \"sourceAccountNumber\": \"0134568358\",\n    \"transactionRef\": \"{{$randomUUID}}\",\n    \"amount\": 2000,\n    \"channel\": \"MOBILE\",\n    \"pin\": \"5431\",\n    \"destinationBankCode\": \"001\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base-url}}/v1/transfers/interbank/transfer",
+					"host": [
+						"{{base-url}}"
+					],
+					"path": [
+						"v1",
+						"transfers",
+						"interbank",
+						"transfer"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Ok",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"destinationAccountName\": \"John Doe\",\n    \"destinationAccountNumber\": \"0224621771\",\n    \"sourceAccountNumber\": \"0134568358\",\n    \"transactionRef\": \"{{$randomUUID}}\",\n    \"amount\": 2000,\n    \"channel\": \"MOBILE\",\n    \"pin\": \"5431\",\n    \"destinationBankCode\": \"001\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base-url}}/v1/transfers/interbank/transfer",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"v1",
+								"transfers",
+								"interbank",
+								"transfer"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 30 Jun 2025 21:40:23 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"statusCode\": 0,\n    \"message\": \"Operation successfully\",\n    \"data\": {\n        \"accountName\": \"John Doe\",\n        \"accountNumber\": \"0224621771\",\n        \"transactionRef\": \"42e6f370-1418-4e61-945a-b10590ae6802\",\n        \"destinationBankCode\": \"001\",\n        \"amount\": 2000\n    },\n    \"errors\": null,\n    \"successful\": true\n}"
+				}
+			]
+		},
+		{
+			"name": "Get-Transactions",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base-url}}/v1/transactions",
+					"host": [
+						"{{base-url}}"
+					],
+					"path": [
+						"v1",
+						"transactions"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Ok",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base-url}}/v1/transactions",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"v1",
+								"transactions"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 30 Jun 2025 21:49:39 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"statusCode\": 0,\n    \"message\": \"Operation successfully\",\n    \"data\": [\n        {\n            \"transactionRef\": \"9aeed46a-670e-4331-b8da-dfe8e0b77ccd\",\n            \"sourceAccountNumber\": \"0134568358\",\n            \"beneficiary\": \"0224621771\",\n            \"destinationAccountName\": \"John Doe\",\n            \"destinationBankCode\": null,\n            \"amount\": 2000,\n            \"charge\": 0,\n            \"status\": \"SUCCESSFUL\",\n            \"message\": null,\n            \"createdAt\": \"2025-06-30T21:34:41.848+00:00\",\n            \"channel\": \"MOBILE\",\n            \"billCode\": null,\n            \"billReference\": null,\n            \"narration\": \"INTRA/0224621771\",\n            \"transactionType\": \"INTRA_BANK_TRANSFER\"\n        },\n        {\n            \"transactionRef\": \"42e6f370-1418-4e61-945a-b10590ae6802\",\n            \"sourceAccountNumber\": \"0134568358\",\n            \"beneficiary\": \"0224621771\",\n            \"destinationAccountName\": \"John Doe\",\n            \"destinationBankCode\": \"001\",\n            \"amount\": 2000,\n            \"charge\": 0,\n            \"status\": \"SUCCESSFUL\",\n            \"message\": null,\n            \"createdAt\": \"2025-06-30T21:40:23.776+00:00\",\n            \"channel\": \"MOBILE\",\n            \"billCode\": null,\n            \"billReference\": null,\n            \"narration\": \"OTB/0224621771\",\n            \"transactionType\": \"INTER_BANK_TRANSFER\"\n        }\n    ],\n    \"errors\": null,\n    \"successful\": true\n}"
+				}
+			]
+		},
+		{
+			"name": "Get-Bills-list",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base-url}}/v1/bills/list",
+					"host": [
+						"{{base-url}}"
+					],
+					"path": [
+						"v1",
+						"bills",
+						"list"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Ok",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base-url}}/v1/bills/list",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"v1",
+								"bills",
+								"list"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 30 Jun 2025 21:47:56 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"statusCode\": 0,\n    \"message\": \"Operation successfully\",\n    \"data\": [\n        {\n            \"name\": \"Electricity\",\n            \"code\": \"BILL001\",\n            \"amount\": 5000\n        },\n        {\n            \"name\": \"Water\",\n            \"code\": \"BILL002\",\n            \"amount\": 5000\n        }\n    ],\n    \"errors\": null,\n    \"successful\": true\n}"
+				}
+			]
+		},
+		{
+			"name": "Bill-validation",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"beneficiary\": \"14650224621771\",\n    \"code\": \"BILL001\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base-url}}/v1/bills/validate",
+					"host": [
+						"{{base-url}}"
+					],
+					"path": [
+						"v1",
+						"bills",
+						"validate"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Ok",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"beneficiary\": \"14650224621771\",\n    \"code\": \"BILL001\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base-url}}/v1/bills/validate",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"v1",
+								"bills",
+								"validate"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 30 Jun 2025 21:52:20 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"statusCode\": 0,\n    \"message\": \"Operation successfully\",\n    \"data\": {\n        \"beneficiary\": \"14650224621771\",\n        \"billCode\": \"BILL001\",\n        \"billName\": \"BillTest\",\n        \"amount\": 5000\n    },\n    \"errors\": null,\n    \"successful\": true\n}"
+				}
+			]
+		},
+		{
+			"name": "Bill-Payment",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"beneficiary\": \"14650224621771\",\n    \"code\": \"BILL001\",\n    \"channel\": \"MOBILE\",\n    \"pin\": \"5431\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base-url}}/v1/bills/pay",
+					"host": [
+						"{{base-url}}"
+					],
+					"path": [
+						"v1",
+						"bills",
+						"pay"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Ok",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"beneficiary\": \"14650224621771\",\n    \"code\": \"BILL001\",\n    \"channel\": \"MOBILE\",\n    \"pin\": \"5431\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base-url}}/v1/bills/pay",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"v1",
+								"bills",
+								"pay"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 30 Jun 2025 21:55:00 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"statusCode\": 0,\n    \"message\": \"Operation successfully\",\n    \"data\": {\n        \"beneficiary\": \"14650224621771\",\n        \"billCode\": \"BILL001\",\n        \"billName\": \"BillTest\",\n        \"amount\": 5000,\n        \"transactionRef\": \"BILLd6fb951f-9c90-41f6-bb5b-e5103b6a6cb2\"\n    },\n    \"errors\": null,\n    \"successful\": true\n}"
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "value",
+				"value": "{{sessionId}}",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "sessionId",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base-url",
+			"value": "http://localhost:8081",
+			"type": "string"
+		},
+		{
+			"key": "register-session-id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "sessionId",
+			"value": "",
+			"type": "string"
+		}
+	]
+}

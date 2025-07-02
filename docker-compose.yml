@@ -1,0 +1,78 @@
+version: '3.8'
+
+services:
+  discovery:
+    build:
+      context: ./discovery
+    # ports:
+    #   - "9090:9090"
+    environment:
+      - ACTIVE_PROFILE=test
+    depends_on: []
+    networks:
+      - isw-net
+
+  config-server:
+    build:
+      context: ./config-server
+    # ports:
+    #   - "9888:9888"
+    environment:
+      - ACTIVE_PROFILE=test
+    depends_on:
+      - discovery
+    networks:
+      - isw-net
+
+  api-gateway:
+    build:
+      context: ./api-gateway
+    ports:
+      - "8080:8080"
+    environment:
+      - ACTIVE_PROFILE=test
+    depends_on:
+      - discovery
+      - config-server
+    networks:
+      - isw-net
+
+  middleware-service:
+    build:
+      context: ./middleware-service
+    # ports:
+    #   - "8081:8081"
+    environment:
+      - ACTIVE_PROFILE=test
+      - REDIS_URL=redis
+    depends_on:
+      - discovery
+      - config-server
+      - redis
+    networks:
+      - isw-net
+
+  corebanking-service:
+    build:
+      context: ./corebanking-service
+    # ports:
+    #   - "8082:8082"
+    environment:
+      - ACTIVE_PROFILE=test
+    depends_on:
+      - discovery
+      - config-server
+    networks:
+      - isw-net
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    # ports:
+    #   - "6379:6379"
+    networks:
+      - isw-net
+
+networks:
+  isw-net:
+    driver: bridge
